@@ -1,4 +1,4 @@
-package model;
+package by.psu.model;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -9,17 +9,18 @@ import java.util.Map;
 import java.util.Random;
 
 public class Booking {
+    private static final Random RANDOM = new Random();
+
     private String bookingId;
     private Client client;
     private Map<TourService, Integer> serviceParticipants;
     private LocalDate bookingDate;
     private BookingStatus status;
-    private static final Random random = new Random();
 
     public Booking(Client client, Map<TourService, Integer> serviceParticipants) {
         validateBooking(client, serviceParticipants);
 
-        this.bookingId = "BK" + System.currentTimeMillis() + String.format("%04d", random.nextInt(10000));
+        this.bookingId = "BK" + System.currentTimeMillis() + String.format("%04d", RANDOM.nextInt(10000));
         this.client = client;
         this.serviceParticipants = new HashMap<>(serviceParticipants);
         this.bookingDate = LocalDate.now();
@@ -56,21 +57,29 @@ public class Booking {
         }
     }
 
-    public String getBookingId() { return bookingId; }
-    public Client getClient() { return client; }
-    public Map<TourService, Integer> getServiceParticipants() { return new HashMap<>(serviceParticipants); }
-    public LocalDate getBookingDate() { return bookingDate; }
-    public BookingStatus getStatus() { return status; }
-
     public void addService(TourService service, int participants) {
         validateService(service, participants);
         serviceParticipants.put(service, participants);
     }
 
-    public void removeService(TourService service) {
-        if (service == null || !serviceParticipants.containsKey(service))
+    public void removeService(Integer tourServiceId) {
+        if (tourServiceId == null) {
+            throw new TourServiceValidationException("ID услуги не может быть null");
+        }
+
+        TourService tourServiceToRemove = null;
+        for (TourService service : serviceParticipants.keySet()) {
+            if (service.getId().equals(tourServiceId)) {
+                tourServiceToRemove = service;
+                break;
+            }
+        }
+
+        if (tourServiceToRemove == null) {
             throw new TourServiceValidationException("Услуга не найдена");
-        serviceParticipants.remove(service);
+        }
+
+        serviceParticipants.remove(tourServiceToRemove);
     }
 
     public void updateParticipants(TourService service, int participants) {
@@ -126,6 +135,26 @@ public class Booking {
         if (status != BookingStatus.PENDING && status != BookingStatus.CONFIRMED)
             throw new TourServiceValidationException("Статус должен быть PENDING или CONFIRMED");
         status = BookingStatus.CANCELLED;
+    }
+
+    public String getBookingId() {
+        return bookingId;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public Map<TourService, Integer> getServiceParticipants() {
+        return new HashMap<>(serviceParticipants);
+    }
+
+    public LocalDate getBookingDate() {
+        return bookingDate;
+    }
+
+    public BookingStatus getStatus() {
+        return status;
     }
 
     @Override

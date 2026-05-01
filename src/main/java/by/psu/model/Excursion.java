@@ -1,4 +1,4 @@
-package model;
+package by.psu.model;
 
 import java.math.BigDecimal;
 import java.time.Duration;
@@ -10,6 +10,8 @@ public class Excursion extends TourService {
     private String guidName;
     private Duration duration;
     private Difficulty difficulty;
+    private boolean lunchIncluded;
+
 
     // Конструктор по умолчанию
     public Excursion() {
@@ -18,11 +20,11 @@ public class Excursion extends TourService {
 
     // Конструктор со всеми параметрами
     public Excursion(Integer id, String name, BigDecimal price, LocalDate from, LocalDate to,
-                     String guidName, Duration duration, Difficulty difficulty) {
+                     String guideName, String excursionType, boolean lunchIncluded) {
         super(id, name, price, from, to);
-        this.guidName = guidName;
-        this.duration = duration;
-        this.difficulty = difficulty;
+        this.guidName = guideName;
+        this.duration = Duration.parse(excursionType);
+        this.lunchIncluded = lunchIncluded;
     }
 
     public String getGuidName() {
