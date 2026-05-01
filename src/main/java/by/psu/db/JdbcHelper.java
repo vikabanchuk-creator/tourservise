@@ -67,9 +67,6 @@ public class JdbcHelper {
         statement.setBigDecimal(2, excursion.getPrice());
         statement.setObject(3, excursion.getFrom());
         statement.setObject(4, excursion.getTo());
-        statement.setString(5,  String.valueOf(excursion.getGuidName()));
-        statement.setString(6, String.valueOf(excursion.getGuidName()));
-        statement.setBoolean(7, Boolean.parseBoolean(String.valueOf(excursion.getGuidName())));
         statement.execute();
         var keys = statement.getGeneratedKeys();
         keys.next();
@@ -91,8 +88,6 @@ public class JdbcHelper {
         statement.setBigDecimal(2, excursion.getPrice());
         statement.setObject(3, excursion.getFrom());
         statement.setObject(4, excursion.getTo());
-        statement.setString(5,  String.valueOf(excursion.getGuidName()));
-        statement.setString(6,  String.valueOf(excursion.getGuidName()));
         statement.setBoolean(7, excursion.isLunchIncluded());
         statement.setInt(8, excursion.getId());
         statement.executeUpdate();
