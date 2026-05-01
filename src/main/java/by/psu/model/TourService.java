@@ -1,4 +1,4 @@
-package model;
+package by.psu.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -84,4 +84,6 @@ public abstract class TourService {
                 ", to=\"" + (to != null ? to.format(dateFormatter) : "null") + "\"" +
                 "}";
     }
+
+
 }
